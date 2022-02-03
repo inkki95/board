@@ -8,11 +8,13 @@
 <script th:inline="javascript">
 
     /*<![CDATA[*/
-
+<!--컨트롤러에서 보낸 메세지를 포함해서 출력-->
     var message = [[${message}]];
     alert(message);
+<!--    화면에 창으로 문구 띄우는 함수 alert-->
 
     location.replace([[${searchUrl}]]);
+<!--    페이지를 이동  [[이동경로]]-->
 
     /*]]>*/
 </script>

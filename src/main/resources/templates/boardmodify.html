@@ -29,8 +29,11 @@
 <body>
 <div class="layout">
     <form th:action="@{/board/update/{id}(id = ${board.id})}" method="post">
+<!--        액션 버튼은 수정버튼 눌렀을때 어디로 던질건지-->
         <input name="title" type="text" th:value="${board.title}">
+<!--        컨트롤에서 모델로 넘긴 변수를 th:value 로-->
         <textarea name="content" th:text="${board.content}"></textarea>
+<!--        컨트롤러에서 모델로 넘긴 변수가 title이랑 content 이거를 받는 구문-->
         <button type="submit">수정</button>
     </form>
 </div>

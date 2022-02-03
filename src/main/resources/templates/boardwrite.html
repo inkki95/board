@@ -28,11 +28,17 @@
 
 <body>
     <div class="layout">
+<!--        /board/writepro에 해당하는 컨트롤러로 데이터를 넘김-->
         <form action="/board/writepro" method="post" enctype="multipart/form-data">
+<!--            enctype="multipart/form-data" -> 파일 올리기 떄문에 추가-->
             <input name="title" type="text">
+<!--            title 이름으로 넘김-->
             <textarea name="content"></textarea>
+<!--            content 이름으로 넘김-->
             <input type="file" name="file">
+<!--            파일 올리기 "file"타입 인풋타입-->
             <button type="submit">작성</button>
+<!--            버튼 누르면 데이터들이 woritepro로 넘어감-->
         </form>
     </div>
 </body>

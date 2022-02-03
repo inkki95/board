@@ -31,18 +31,29 @@
                     <td th:text="${board.id}">1</td>
                     <td>
                         <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}"></a>
+<!--                        해당 제목을 누르면 세부 내역(글내용)을 보는 구문-->
                     </td>
                 </tr>
             </tbody>
         </table>
 
         <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-            <a th:if="${page != nowPage}" th:href="@{/board/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
-            <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+            <a th:if="${page != nowPage}" th:href="@{/board/list(page = ${page - 1},
+                searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+<!--            서치키워드 추가하면 "11"을 검색하고 1페이지에서 2페이지를 누르면 노멀 2페이지로감-->
+<!--            파람.서치키워드 구문을 쓰면 2페이지에서도 "11"에 대한 검색 결과로 url을 주소창에 물고감 -->
+            <strong th:if="${page == nowPage}" th:text="${page}" style="color:red"></strong>
         </th:block>
+<!--        th:block = 굳이 태그로 감쌀 필요가 없는 부분에서 사용-->
+<!--        th:text = 태그 안에 데이터를 출력-->
+<!--        th:each = 반복문-->
+<!--        th:each = "${number:#number(시작번호, 끝번호)}"  시작번호에서 끝번호까지 반복-->
         <form th:action="@{/board/list}" method="get">
             <input type="text" name="searchKeyword">
             <button type="submit">검색</button>
+        </form>
+        <form action="/board/write">
+        <button type="submit">글 작성</button>
         </form>
     </div>
 

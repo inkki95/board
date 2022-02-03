@@ -14,23 +14,28 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+// 로직 알고리즘 처리하는 곳
 public class BoardService {
 
     @Autowired
+//    BoardRepository boardRepository = new BoardRepository 이런식으로 해야하지만
+//    오토와이어드를 하면 스프링 빈이 와서 알아서 주입을 해줌
     private BoardRepository boardRepository;
 
     // 글 작성 처리
     public void write(Board board, MultipartFile file) throws Exception{
-
+//        throws Exception  예외 처리.
+// MultipartFile file 파일을 받기 위한 구문
         String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
-
+//System.getProperty("user.dir")하면 우리의 프로젝트 경로를 담아줌 뒤에 추가로 더 들어가기
+//        저 경로에 파일을 저장함
         UUID uuid = UUID.randomUUID();
-
+//uuid는 식별자...랜덤유유아이디 랜덤으로 파일 네임을 만들기
         String fileName = uuid + "_" + file.getOriginalFilename();
-
+//랜덤으로 식별자가 붙고 _ 붙고 파일이름이 붙어서 전체 파일명
         File saveFile = new File(projectPath, fileName);
-
         file.transferTo(saveFile);
+//        경로에 이름은 이렇게로 저장해라.
 
         board.setFilename(fileName);
         board.setFilepath("/files/" + fileName);
@@ -40,7 +45,7 @@ public class BoardService {
 
     // 게시글 리스트 처리
     public Page<Board> boardList(Pageable pageable) {
-
+//  Page클래스로 받기 페이져블이 들어오니까 페이져블없엇으면 리스트 클래스로 받음
         return boardRepository.findAll(pageable);
     }
 
@@ -53,5 +58,10 @@ public class BoardService {
     public Board boardView(Integer id) {
 
         return boardRepository.findById(id).get();
+    }
+
+    public void boardDelete(Integer id) {
+
+        boardRepository.deleteById(id);
     }
 }
