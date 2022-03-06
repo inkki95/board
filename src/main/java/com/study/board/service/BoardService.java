@@ -1,8 +1,10 @@
 package com.study.board.service;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.study.board.entity.Board;
 import com.study.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.system.SystemProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+
+import static jdk.nashorn.internal.objects.Global.print;
 
 @Service
 // 로직 알고리즘 처리하는 곳
@@ -29,17 +33,29 @@ public class BoardService {
         String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
 //System.getProperty("user.dir")하면 우리의 프로젝트 경로를 담아줌 뒤에 추가로 더 들어가기
 //        저 경로에 파일을 저장함
-        UUID uuid = UUID.randomUUID();
-//uuid는 식별자...랜덤유유아이디 랜덤으로 파일 네임을 만들기
-        String fileName = uuid + "_" + file.getOriginalFilename();
-//랜덤으로 식별자가 붙고 _ 붙고 파일이름이 붙어서 전체 파일명
-        File saveFile = new File(projectPath, fileName);
-        file.transferTo(saveFile);
-//        경로에 이름은 이렇게로 저장해라.
-
-        board.setFilename(fileName);
-        board.setFilepath("/files/" + fileName);
-
+        if(file!=null) {
+            // 일반 글쓰기랑 수정이랑 겹쳐서.. 수정할때는 파일업로드가 불가능
+            // 수정할때는 파일이 안들어가므로 파일 변수에 null이 들어감
+            UUID uuid = UUID.randomUUID();
+            //uuid는 식별자...랜덤유유아이디 랜덤으로 파일 네임을 만들기
+            //        System.out.print(uuid);
+            String fileName = uuid + "_" + file.getOriginalFilename();
+            //랜덤으로 식별자가 붙고 _ 붙고 파일이름이 붙어서 전체 파일명
+            if (!file.isEmpty()) {
+                File saveFile = new File(projectPath, fileName);
+                file.transferTo(saveFile);
+                //        경로에 이름은 이렇게로 저장해라.
+                board.setFilename(fileName);
+                board.setFilepath("/files/" + fileName);
+            }
+            if (file.isEmpty()) {
+                fileName = "X.jpg";
+                File saveFile = new File(projectPath, fileName);
+                file.transferTo(saveFile);
+                board.setFilename(null);
+                board.setFilepath(null);
+            }
+            }
         boardRepository.save(board);
     }
 

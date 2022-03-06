@@ -1,6 +1,7 @@
 package com.study.board.controller;
 
 import com.study.board.entity.Board;
+import com.study.board.repository.BoardRepository;
 import com.study.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,6 +86,14 @@ public class BoardController {
     public String boardView(Model model, Integer id) {
 
         model.addAttribute("board", boardService.boardView(id));
+
+        String FN = boardService.boardView(id).getFilename();
+        if (FN==null){
+//        if (FN.equals(null)){
+//            문자열 비교는 .equals("문자")
+//            == 는 주소값을 비교하는 것
+            return "NFboardview";
+        }
         return "boardview";
     }
 
